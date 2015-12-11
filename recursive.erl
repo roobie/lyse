@@ -1,5 +1,11 @@
 -module(recursive).
--export([fac/1, fib/1, len/1, duplicate/2, reverse/1]).
+-export([fac/1,
+         fib/1,
+         len/1,
+         duplicate/2,
+         drop/2,
+         reverse/1,
+         slice/3]).
 
 fac(0) -> 1;
 fac(N) when N > 0 ->
@@ -36,3 +42,18 @@ reverse_tco(Acc, []) ->
     Acc;
 reverse_tco(Acc, [Head|Tail]) ->
     reverse_tco([Head|Acc], Tail).
+
+drop(L, 0) -> L;
+drop([_Hd|Tl], Count) ->
+    drop(Tl, Count - 1).
+
+slice(L, Start, Count) ->
+    slice_tco([], drop(L, Start), Count).
+
+%% if count is zero, return accumulator
+slice_tco(Acc, _L, 0) -> Acc;
+%% if the list is empty, return accumulator
+slice_tco(Acc, [], _Count) -> Acc;
+slice_tco(Acc, [Head|Tail], Count) ->
+    slice_tco(Acc ++ [Head], Tail, Count - 1).
+
